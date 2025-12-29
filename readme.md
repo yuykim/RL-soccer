@@ -78,7 +78,7 @@ python -m gfootball.play_game --action_set=full
 
 30명이 설치하다 보면 반드시 발생하는 오류들입니다. 당황하지 말고 아래 해결법을 따르세요.
 
-### **오류 1: `RuntimeError: Dynamic linking causes SDL downgrade!**`
+### 오류 1: `RuntimeError: Dynamic linking causes SDL downgrade!`
 
 * **원인**: Pygame과 G-Football이 사용하는 그래픽 라이브러리(SDL2) 버전이 충돌할 때 발생합니다.
 * **해결법**: 터미널에 아래 명령어를 입력하여 파일을 강제로 교체하세요.
@@ -86,17 +86,17 @@ python -m gfootball.play_game --action_set=full
 copy "%CONDA_PREFIX%\Lib\site-packages\pygame\SDL2.dll" "%CONDA_PREFIX%\Lib\site-packages\gfootball_engine\SDL2.dll" /y
 
 ```
-### **오류 2: `error: Microsoft Visual C++ 14.0 or greater is required.**`
+### 오류 2: `error: Microsoft Visual C++ 14.0 or greater is required.`
 
 * **원인**: 엔진 컴파일에 필요한 C++ 컴파일러가 컴퓨터에 없는 경우입니다.
 * **해결법**: [Visual Studio Build Tools](https://www.google.com/search?q=https://visualstudio.microsoft.com/ko/visual-cpp-build-tools/)를 다운로드하여 실행한 후, **"C++를 사용한 데스크톱 개발"** 항목을 체크하고 설치하세요. (설치 후 컴퓨터 재부팅 권장)
 
-### **오류 3: `ImportError: cannot import name 'six' from 'sklearn.utils.fixes'**`
+### 오류 3: `ImportError: cannot import name 'six' from 'sklearn.utils.fixes'`
 
 * **원인**: 일부 패키지에서 `six` 라이브러리를 찾지 못하는 경우입니다.
 * **해결법**: `pip install six`를 입력하여 명시적으로 설치해 주세요.
 
-### **오류 4: 게임 화면이 너무 작거나 끊겨요**
+### 오류 4: 게임 화면이 너무 작거나 끊겨요
 
 * **원인**: 노트북의 저사양 모드 혹은 해상도 설정 문제입니다.
 * **해결법**: `env_name` 설정에서 `render=False`로 두고 학습시킨 뒤, 결과 확인할 때만 `render=True`를 사용하세요.
