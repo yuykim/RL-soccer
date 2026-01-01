@@ -1,7 +1,9 @@
 .DS_Store
 gfootball
 workspace/**/frames
+RL/**/frames
 workspace/**/log
+RL/**/log
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
