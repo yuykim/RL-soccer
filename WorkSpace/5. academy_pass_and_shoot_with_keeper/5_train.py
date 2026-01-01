@@ -7,7 +7,7 @@ from stable_baselines3.common.callbacks import CheckpointCallback
 
 # 1. 환경 및 학습 설정
 SCENARIO_NAME = 'academy_pass_and_shoot_with_keeper'              # 시나리오
-TOTAL_TIMESTEPS = 10000                                 # 총 학습 단계 
+TOTAL_TIMESTEPS = 100000                                 # 총 학습 단계 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MODEL_DIR = os.path.join(BASE_DIR, "models")            # 모델 저장 폴더명
 MODEL_NAME = "academy_pass_and_shoot_with_keeper"                 # 저장될 모델 파일 이름

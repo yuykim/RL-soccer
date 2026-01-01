@@ -39,13 +39,11 @@ for ep in range(1, episodes + 1):
 
     while not done:
         action, _ = model.predict(obs, deterministic=True)
-
         step_out = test_env.step(action)
 
         frame = test_env.render(mode='rgb_array')
         save_frame(frame, step_count)
 
-        # 4개/5개 리턴 모두 대응
         if len(step_out) == 5:
             obs, reward, terminated, truncated, info = step_out
             done = bool(terminated or truncated)
@@ -54,7 +52,7 @@ for ep in range(1, episodes + 1):
 
         score += float(reward)
         step_count += 1
-        time.sleep(0.05)
+        time.sleep(0.01) 
 
     print(f"episode {ep} terminated. score: {score}")
     time.sleep(1)
