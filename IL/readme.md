@@ -7,6 +7,7 @@
 ![Robot Arm Football Demo](../doc/gameplay.gif)
 
 - 사람의 게임 플레이영상 : https://drive.google.com/file/d/1nhdAwGLTyb9hywAcStkV3nlO3njdwcVK/view?usp=sharing
+    - (약 6000프레임)
 - 학습된 모델의 플레이 영상 : https://drive.google.com/file/d/1fYemqlV27fp6omK9S_TlL1f8KAjSiQB-/view?usp=sharing
 
 ---
