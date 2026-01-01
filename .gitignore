@@ -4,6 +4,8 @@ workspace/**/frames
 RL/**/frames
 workspace/**/log
 RL/**/log
+IL/**/Video
+doc/**/Video
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
