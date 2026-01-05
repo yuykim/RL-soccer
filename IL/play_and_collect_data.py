@@ -23,12 +23,12 @@ env = football_env.create_environment(
 # 3. 조작 장치 선택 
 # -----------------------------------------------------------------
 # 게임패드 사용
-player_config = {'player_gamepad': 0, 'left_players': 1, 'right_players': 0}
-controller = GamepadPlayer(player_config, env_config)
+# player_config = {'player_gamepad': 0, 'left_players': 1, 'right_players': 0}
+# controller = GamepadPlayer(player_config, env_config)
 
 # 키보드 사용 
-# player_config = {'left_players': 1, 'right_players': 0}
-# controller = KeyboardPlayer(player_config, env_config)
+player_config = {'left_players': 1, 'right_players': 0}
+controller = KeyboardPlayer(player_config, env_config)
 # -----------------------------------------------------------------
 
 all_actions = football_action_set.get_action_set(env_config)
@@ -38,7 +38,7 @@ TARGET_FPS = 18 # 10은 느리고 30은 빠를 때의 최적 속도
 
 obs_buffer, action_buffer = [], []
 
-print(f"데이터 수집 시작! (현재 설정 FPS: {TARGET_FPS})")
+print(f"Data Collection Start! (Target FPS: {TARGET_FPS})")
 
 try:
     obs = env.reset()
@@ -59,18 +59,18 @@ try:
         
         if done:
             obs = env.reset()
-            print(f"\n[안내] 경기 종료! 현재까지 {len(obs_buffer)} 프레임 확보됨.")
+            print(f"\n[Info] Episode Finished! Current frames: {len(obs_buffer)}")
 
         if len(obs_buffer) % 1000 == 0:
-            print(f"기록 중... {len(obs_buffer)} 프레임 돌파")
+            print(f"Recording... {len(obs_buffer)} frames collected")
 
 except KeyboardInterrupt:
     if len(obs_buffer) > 0:
         # 데이터 저장
         np.savez(save_path, obs=np.array(obs_buffer), actions=np.array(action_buffer))
-        print(f"\n저장 성공! 파일 위치: {save_path}")
-        print(f"총 수집 프레임: {len(obs_buffer)}")
+        print(f"\nSave Success! Path: {save_path}")
+        print(f"Total Frames: {len(obs_buffer)}")
     else:
-        print("\n저장할 데이터가 없습니다.")
+        print("\nNo data to save.")
 finally:
     env.close()

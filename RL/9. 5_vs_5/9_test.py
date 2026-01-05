@@ -2,7 +2,7 @@ import os
 import time
 import gfootball.env as football_env
 from stable_baselines3 import PPO
-from utils import cleanup, save_frame, make_video, make_video_from_frames  # 영상 생성 유틸
+from utils import cleanup, save_frame, make_video  # 영상 생성 유틸
 
 SCENARIO_NAME = '5_vs_5'
 
@@ -27,7 +27,7 @@ model = PPO.load(MODEL_PATH)
 episodes = 1
 for ep in range(1, episodes + 1):
     try:
-        cleanup()
+        # cleanup()
         obs = test_env.reset()
         done = False
         score = 0.0
@@ -40,7 +40,7 @@ for ep in range(1, episodes + 1):
 
             # 프레임 저장
             frame = test_env.render(mode='rgb_array')
-            save_frame(frame, step_count)
+            # save_frame(frame, step_count)
 
             # 종료 이유 출력 분기 처리
             if len(step_out) == 5:
@@ -59,12 +59,12 @@ for ep in range(1, episodes + 1):
 
         print(f"episode {ep} terminated. score: {score}")
         time.sleep(1)
-        make_video()
+        # make_video()
 
     except KeyboardInterrupt:
         # Ctrl+C 눌렸을 때: 지금까지 저장된 프레임으로 영상 생성
-        print("\nCtrl+C detected! Creating emergency video from saved frames...")
-        make_video()  # 이미 구현된 영상 생성 함수 호출
+        # print("\nCtrl+C detected! Creating emergency video from saved frames...")
+        # make_video()  # 이미 구현된 영상 생성 함수 호출
 
         # (선택) 프레임 폴더에서 직접 영상 만들기 함수가 따로 있다면:
         # make_video_from_frames("frames_saved_folder", "output_video.mp4")

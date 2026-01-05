@@ -21,7 +21,11 @@ test_env = football_env.create_environment(
     env_name=SCENARIO_NAME, 
     stacked=False, 
     representation='simple115', 
-    render=True 
+    render=True, 
+    config={
+        'render_resolution_x': 640, 
+        'render_resolution_y': 480
+    }
     )
 
 print(f"load model: {MODEL_PATH}")
@@ -29,7 +33,7 @@ model = PPO.load(MODEL_PATH)
 
 episodes = 5
 for ep in range(1, episodes + 1):
-    cleanup()
+    # cleanup()
 
     obs = test_env.reset()
     done = False
@@ -42,7 +46,7 @@ for ep in range(1, episodes + 1):
         step_out = test_env.step(action)
 
         frame = test_env.render(mode='rgb_array')
-        save_frame(frame, step_count)
+        # save_frame(frame, step_count)
 
         if len(step_out) == 5:
             obs, reward, terminated, truncated, info = step_out
@@ -57,7 +61,7 @@ for ep in range(1, episodes + 1):
     print(f"episode {ep} terminated. score: {score}")
     time.sleep(1)
 
-    make_video()
+    # make_video()
 
 test_env.close()
 print("finish!")
