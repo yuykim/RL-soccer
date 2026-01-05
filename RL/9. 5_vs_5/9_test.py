@@ -2,80 +2,70 @@ import os
 import time
 import gfootball.env as football_env
 from stable_baselines3 import PPO
-from utils import cleanup, save_frame, make_video, make_video_from_frames  # 영상 생성 유틸
+from utils import cleanup, save_frame, make_video # 직접 만드신 유틸리티 함수 가정
 
-SCENARIO_NAME = '5_vs_5'
+# 1. 시나리오 및 경로 설정
+SCENARIO_NAME = '5_vs_5' # 현재 테스트할 시나리오 이름
 
+# 파일 위치 기준으로 상위 폴더의 models 폴더에서 모델을 찾습니다.
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-MODEL_PATH = os.path.join(BASE_DIR, "models", "5_vs_5.zip")
+MODEL_DIR = os.path.join(BASE_DIR, "..", "models")
+MODEL_PATH = os.path.join(MODEL_DIR, f"{SCENARIO_NAME}.zip")
 
+# 모델 파일 존재 여부 확인
 if not os.path.exists(MODEL_PATH):
-    print(f"error: can't find ({MODEL_PATH})")
+    print(f"Error: Can't find model file at ({MODEL_PATH})")
     raise SystemExit(1)
 
-# 테스트 환경 생성 (render=True로 눈으로 확인)
-test_env = football_env.create_environment(
-    env_name=SCENARIO_NAME,
-    stacked=False,
-    representation='simple115',
-    render=True
+# 2. 테스트용 환경 생성 
+# 화면을 보기 위해 render=True, 학습 때와 동일한 simple115 사용
+test_env = football_env.create_environment( 
+    env_name=SCENARIO_NAME, 
+    stacked=False, 
+    representation='simple115', 
+    render=True 
 )
 
-print(f"load model: {MODEL_PATH}")
+print(f">>> Load model: {MODEL_PATH}")
 model = PPO.load(MODEL_PATH)
 
-episodes = 1
+# 3. 에피소드 반복 테스트
+episodes = 5
 for ep in range(1, episodes + 1):
-    try:
-        cleanup()
-        obs = test_env.reset()
-        done = False
-        score = 0.0
-        step_count = 0
-        print(f"episode {ep} start!")
+    cleanup() # 이전 프레임 삭제 등 정리
 
-        while not done:
-            action, _ = model.predict(obs, deterministic=True)
-            step_out = test_env.step(action)
+    obs = test_env.reset()
+    done = False
+    score = 0.0
+    step_count = 0
+    print(f">>> Episode {ep} start!")
 
-            # 프레임 저장
-            frame = test_env.render(mode='rgb_array')
-            save_frame(frame, step_count)
+    while not done:
+        # 모델로부터 행동 예측 (deterministic=True로 설정하여 최선의 행동 유도)
+        action, _ = model.predict(obs, deterministic=True)
+        step_out = test_env.step(action)
 
-            # 종료 이유 출력 분기 처리
-            if len(step_out) == 5:
-                obs, reward, terminated, truncated, info = step_out
-                done = bool(terminated or truncated)
-                if done:
-                    print(f"Terminated(goal/out): {terminated}, Truncated(timeover): {truncated}")
-            else:
-                obs, reward, done, info = step_out
-                if done:
-                    print(f"Terminated(info): {info}")
+        # 현재 화면 렌더링 및 프레임 저장
+        frame = test_env.render(mode='rgb_array')
+        save_frame(frame, step_count)
 
-            score += float(reward)
-            step_count += 1
-            time.sleep(0.05)
+        # 환경 버전에 따른 반환값 개수 처리 (4개 또는 5개)
+        if len(step_out) == 5:
+            obs, reward, terminated, truncated, info = step_out
+            done = bool(terminated or truncated)
+        else:
+            obs, reward, done, info = step_out
 
-        print(f"episode {ep} terminated. score: {score}")
-        time.sleep(1)
-        make_video()
+        score += float(reward)
+        step_count += 1
+        time.sleep(0.01) # VNC에서 너무 빠르지 않게 조절
 
-    except KeyboardInterrupt:
-        # Ctrl+C 눌렸을 때: 지금까지 저장된 프레임으로 영상 생성
-        print("\nCtrl+C detected! Creating emergency video from saved frames...")
-        make_video()  # 이미 구현된 영상 생성 함수 호출
+    print(f">>> Episode {ep} terminated. Total score: {score}")
+    time.sleep(1)
 
-        # (선택) 프레임 폴더에서 직접 영상 만들기 함수가 따로 있다면:
-        # make_video_from_frames("frames_saved_folder", "output_video.mp4")
+    # 한 에피소드가 끝나면 영상 제작
+    print(f">>> Making video for episode {ep}...")
+    make_video()
 
-        print("Video created. Exiting safely...")
-        break  # 에피소드 루프 탈출
-
-# 최종 종료 처리
-try:
-    test_env.close()
-except:
-    pass
-
-print("finish!") 
+test_env.close()
+print(">>> All tests and video recordings finished!")
