@@ -46,8 +46,8 @@ for ep in range(1, episodes + 1):
         step_out = test_env.step(action)
 
         # 현재 화면 렌더링 및 프레임 저장
-        frame = test_env.render(mode='rgb_array')
-        save_frame(frame, step_count)
+        # frame = test_env.render(mode='rgb_array')
+        # save_frame(frame, step_count)
 
         # 환경 버전에 따른 반환값 개수 처리 (4개 또는 5개)
         if len(step_out) == 5:
@@ -65,7 +65,7 @@ for ep in range(1, episodes + 1):
 
     # 한 에피소드가 끝나면 영상 제작
     print(f">>> Making video for episode {ep}...")
-    make_video()
+    # make_video()
 
 test_env.close()
 print(">>> All tests and video recordings finished!")
